@@ -291,7 +291,7 @@ a.btn{text-decoration:none}
       <nav class="picker" aria-label="Charts">
         <button class="btn" type="button" data-pick="dots" aria-pressed="true"><span class="n">1</span>Prompts as dots</button>
         <button class="btn" type="button" data-pick="layers" aria-pressed="false"><span class="n">2</span>Layer by layer</button>
-        <button class="btn" type="button" data-pick="flatten" aria-pressed="false"><span class="n">3</span>Abliteration flattens it</button>
+        <button class="btn" type="button" data-pick="flatten" aria-pressed="false"><span class="n">3</span>Abliteration projects it</button>
         <button class="btn" type="button" data-pick="experts" aria-pressed="false"><span class="n">4</span>Every expert</button>
         <button class="btn" type="button" data-pick="flavors" aria-pressed="false"><span class="n">5</span>Flavors of refusal</button>
         <button class="btn" type="button" data-pick="methods" aria-pressed="false"><span class="n">6</span>Other methods</button>
@@ -352,14 +352,14 @@ a.btn{text-decoration:none}
       </article>
 
       <article data-panel="flatten" hidden>
-        <h2>Abliteration flattens it</h2>
-        <p class="summary"><b>In short:</b> abliteration takes the refusal arrow out of the model's weights. Afterwards, refused and answered prompts look the same along that arrow, so the model stops refusing, and everything else it knows stays.</p>
+        <h2>Abliteration projects out one direction</h2>
+        <p class="summary"><b>In short:</b> abliteration takes the refusal arrow out of the model's weights. In this simplified activation-space illustration, projecting out a chosen direction removes that component. It does not guarantee the model stops refusing or preserves all knowledge; real Heretic modifies weights and requires evaluation.</p>
         <div class="plain" role="group" aria-label="Plain words key">
           <p class="plain-title">Plain words</p>
           <dl>
             <dt>The slider</dt><dd>How much of the “no” arrow we erase, from 0 to 100%.</dd>
-            <dt>Dots sliding together</dt><dd>Pink and yellow start to look the same to the AI, so it stops saying no.</dd>
-            <dt>The sheet</dt><dd>Everything else the AI knows. Abliteration leaves it alone.</dd>
+            <dt>Dots sliding together</dt><dd>The two cluster averages coincide in this constructed example; individual dots still differ and behavior is not guaranteed.</dd>
+            <dt>The green disk</dt><dd>A two-dimensional cross-section of the directions orthogonal to the arrow. This is not a complete map of knowledge.</dd>
             <dt>Weights</dt><dd>The billions of numbers that are the AI. We edit them once and save a new copy; nothing is retrained.</dd>
           </dl>
         </div>
@@ -368,12 +368,12 @@ a.btn{text-decoration:none}
           <p class="intro"><b>The axes, simply:</b> the same three as chart 1. The slider only moves dots along the red arrow: 0.6 parts X for every 0.8 parts Y, never along Z.</p>
           <div class="axis-row" data-axis="x"><span class="axis-chip ax-x">X</span><div><b>PC1.</b><span class="dir">→ Right: refused-like. ← Left: answered-like. At 100% removal, X and Y together can't tell the two apart anymore.</span></div></div>
           <div class="axis-row" data-axis="y"><span class="axis-chip ax-y">Y</span><div><b>PC2.</b><span class="dir">↑ Up: refused-like. ↓ Down: answered-like. Dots move most along Y, because the arrow leans most on it.</span></div></div>
-          <div class="axis-row" data-axis="z"><span class="axis-chip ax-z">Z</span><div><b>PC3.</b><span class="dir">Untouched. Nothing off the arrow moves, including what the model knows.</span></div></div>
+          <div class="axis-row" data-axis="z"><span class="axis-chip ax-z">Z</span><div><b>PC3.</b><span class="dir">This example leaves the Z coordinate unchanged. That does not establish that knowledge or behavior is unchanged.</span></div></div>
           <details><summary>More about the sheet</summary>
-            <p>The green disk is every point with nothing left along the arrow. It's flat because removing one direction from 3 leaves 2. In the real model, removing one direction from 2,048 leaves 2,047, and the model keeps working in all of them.</p>
+            <p>The green disk depicts only a finite patch of the two-dimensional subspace perpendicular to the arrow, not every possible point. Removing one independent direction from a 2,048-dimensional vector space leaves a 2,047-dimensional subspace (a hyperplane), not an ordinary 2D plane. Real weight edits do not necessarily project every activation exactly as this slider does.</p>
           </details>
         </div>
-        <p>At 100%, the pink cloud lands on the yellow one along that arrow, and both sit on the <b class="k-green">green sheet</b>: every direction the model keeps. Knowledge lives on the sheet and stays. What's gone is the one direction that meant "refuse".</p>
+        <p>At 100%, the pink cloud lands on the yellow one along that arrow, and both sit on the <b class="k-green">green sheet</b>: every direction the model keeps. The displayed projection removes one chosen component. Real refusal behavior can be distributed across multiple features, and weight edits may affect unrelated capabilities.</p>
         <h3>Variables</h3>
         <dl class="vars">
           <dt>h</dt><dd>one prompt's point (its activation)</dd>
@@ -392,7 +392,7 @@ a.btn{text-decoration:none}
           <li>The yellow average, same equation: h · r̂ = 2 × 0.6 + (−1) × 0.8 + 1 × 0 = 0.4</li>
           <li>h<sub>new</sub> = (2 − 0.24, −1 − 0.32, 1 − 0) = (1.76, −1.32, 1)</li>
         </ol>
-        <p class="means">Both averages land on the same spot. Along the refusal arrow, harmful and harmless now look identical, so the model has nothing left to refuse with. At α = 0.5 the pink average only gets halfway, to (3.38, 0.84, 1).</p>
+        <p class="means">Both averages land on the same spot. Along the refusal arrow, harmful and harmless now look identical, but this does not prove a real model has lost all refusal behavior. At α = 0.5 the pink average only gets halfway, to (3.38, 0.84, 1).</p>
         <h3>Making it permanent</h3>
         <p>Heretic doesn't edit every prompt while the model runs. It edits the weights once: the matrices that write these points in the first place.</p>
         <dl class="vars">
@@ -830,7 +830,7 @@ a.btn{text-decoration:none}
     <div class="gloss-head"><h2>Glossary</h2><button class="btn" type="button" id="glossClose">Close</button></div>
     <input type="search" id="glossFilter" placeholder="Find a word" aria-label="Find a word in the glossary">
     <dl class="gloss-list">
-      <div class="term"><dt>Abliteration</dt><dd>Removing a model's refusal direction from its weights, so it stops saying no on its own. Its knowledge stays.</dd></div>
+      <div class="term"><dt>Abliteration</dt><dd>Removing a model's refusal direction from its weights, which can reduce refusals but does not guarantee their elimination. Knowledge and behavior may change; compare the edited model against the original.</dd></div>
       <div class="term"><dt>Activation</dt><dd>The list of numbers a model holds for a word at one layer: 2,048 numbers in Qwen.</dd></div>
       <div class="term"><dt>ARA (Arbitrary-Rank Ablation)</dt><dd>Heretic 2's default method: a bigger learned change, across many directions, that keeps harmless answers the same.</dd></div>
       <div class="term"><dt>Axis, dimension</dt><dd>One of the numbers in an activation. Qwen has 2,048; the charts show 3 mixes of them.</dd></div>
@@ -858,10 +858,40 @@ a.btn{text-decoration:none}
       <div class="term"><dt>Token</dt><dd>A word or a piece of a word: the unit a model reads and writes.</dd></div>
       <div class="term"><dt>TPE</dt><dd>The optimizer Heretic uses to decide which settings to try next.</dd></div>
       <div class="term"><dt>Weight</dt><dd>One of a model's billions of stored numbers. Qwen3.6-35B-A3B has about 35 billion.</dd></div>
+      <div class="term"><dt>Transformer</dt><dd>A neural network that repeatedly updates token representations using attention and feed-forward computation; many current language models use decoder-only transformers.</dd></div>
+      <div class="term"><dt>Attention</dt><dd>A mechanism that lets a token combine information from other tokens, using learned query, key and value projections.</dd></div>
+      <div class="term"><dt>Parameter</dt><dd>A learned numerical setting in a model, commonly called a weight.</dd></div>
+      <div class="term"><dt>Qwen</dt><dd>A family of language models. The exact version, parameter count and architecture depend on the model identifier.</dd></div>
+      <div class="term"><dt>35B / 3B active</dt><dd>In a mixture-of-experts model, roughly 35 billion parameters may be stored while only a subset, about 3 billion, participates in processing each token.</dd></div>
+      <div class="term"><dt>GEEKOM A9 Mega</dt><dd>A compact PC. The planned Wisp setup specifies a Ryzen AI Max+ 395 processor and 128 GB of shared memory.</dd></div>
+      <div class="term"><dt>Ryzen AI Max+ 395</dt><dd>An AMD processor with CPU cores, integrated Radeon graphics and an AI accelerator. Different software uses different parts.</dd></div>
+      <div class="term"><dt>Unified memory</dt><dd>RAM shared between CPU and integrated GPU; usable GPU memory depends on system configuration and runtime.</dd></div>
+      <div class="term"><dt>Inference</dt><dd>Using model weights to predict tokens and produce an answer, without training the weights.</dd></div>
+      <div class="term"><dt>Inference backend</dt><dd>Software that executes the model, such as llama.cpp; speed and supported features depend on its build and configuration.</dd></div>
+      <div class="term"><dt>Q8_0</dt><dd>A GGUF quantization type using approximately eight bits per weight plus block-scale overhead.</dd></div>
+      <div class="term"><dt>Q6_K</dt><dd>A GGUF quantization type using approximately six bits per weight plus block metadata.</dd></div>
+      <div class="term"><dt>Tool calling</dt><dd>A model emits a structured request to use a tool. A separate application validates and executes the request; the model does not run tools by itself.</dd></div>
+      <div class="term"><dt>Tool-call parser</dt><dd>Code that interprets model output as a tool name and arguments, often using the model's expected chat template.</dd></div>
+      <div class="term"><dt>Refusal direction</dt><dd>A measured direction in a chosen activation space associated with differences between two prompt sets; it is not necessarily the only cause of refusal.</dd></div>
+      <div class="term"><dt>Hyperplane</dt><dd>A subspace one dimension lower than its surrounding space: removing one independent direction from 2,048 dimensions leaves 2,047.</dd></div>
+      <div class="term"><dt>Projection</dt><dd>Mathematically removing the component of a vector along a chosen unit direction: h' = h - (h dot r)r.</dd></div>
+      <div class="term"><dt>Heretic 2.1</dt><dd>A version of a model-modification tool that searches candidate edits and compares refusal reduction against changes in model behavior.</dd></div>
+      <div class="term"><dt>128 GB RAM</dt><dd>The machine's total installed memory, not a promise that every byte is available to the GPU or model.</dd></div>
+      <div class="term"><dt>MPOA / ARA</dt><dd>Two different candidate model-editing approaches documented in this project; they must be evaluated independently.</dd></div>
     </dl>
   </aside>
 </div>
 
+
+<section class="concepts" aria-label="New concept maps" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px">
+<h2>Concept maps: from hardware to model behavior</h2><p>These maps explain the stack, not measured results from Wisp. Select a topic to see the pieces and their connections.</p>
+<div class="picker" role="tablist" aria-label="Concept map topics"><button class="btn" type="button" role="tab" aria-selected="true" data-concept="transformer">Transformer</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="hardware">Hardware &amp; inference</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="tools">Tool calling</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="evaluation">Editing &amp; evaluation</button></div>
+<div id="concept-transformer" data-concept-panel role="tabpanel"><h3>How a transformer processes a token</h3><p class="eq">Text → tokens → embeddings → repeated attention + feed-forward layers → output scores → next token</p><p>Attention combines context from other tokens. Feed-forward layers transform each token representation. Residual connections carry information forward. An MoE layer routes a token through a subset of available experts; the entire model is not active for every token.</p></div>
+<div id="concept-hardware" data-concept-panel role="tabpanel" hidden><h3>How your local model runs</h3><p class="eq">GEEKOM → Ryzen CPU + Radeon iGPU → unified RAM → llama.cpp → model tokens</p><p>The original BF16 weights are large. Quantization reduces storage and memory demand. GPU acceleration depends on the actual backend (for example, Vulkan or ROCm), drivers and memory allocation. This is an architecture map, not a measured speed claim.</p></div>
+<div id="concept-tools" data-concept-panel role="tabpanel" hidden><h3>Tool calling is an application workflow</h3><p class="eq">User → chat template → model → structured tool request → parser → permission check → tool → result → model</p><p>A model's ability to write a tool request is separate from the harness's ability to execute it. Validate the tool name and arguments, enforce permissions and record the result. Local inference alone does not demonstrate working tool calling.</p></div>
+<div id="concept-evaluation" data-concept-panel role="tabpanel" hidden><h3>Test the edit, not just the picture</h3><p class="eq">Stock model → candidate edit (MPOA / ARA) → evaluate refusals + drift + truthfulness + reasoning + tool calls → compare</p><p>One-direction projection is a teaching model. Actual Heretic edits weights; different layers and experts can behave differently. Compare the edited and stock models on matched prompts, and test quantized deployments again.</p></div>
+</section>
+<script>document.querySelectorAll('[data-concept]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-concept]').forEach(x=>x.setAttribute('aria-selected',String(x===b)));document.querySelectorAll('[data-concept-panel]').forEach(x=>x.hidden=x.id!=='concept-'+b.dataset.concept)}));</script>
 <script>
 (async () => {
   'use strict';
@@ -1091,7 +1121,7 @@ a.btn{text-decoration:none}
   });
 
   const RX = 0.6, RY = 0.8;
-  charts.flatten = Object.assign(chartBase('flatten', 'The same two clouds; a slider removes the refusal component until both clouds land on a green disk', { target: [3, 0.6, 1], pos: [11.5, 6.5, 13.5], dist2d: 16 }), {
+  charts.flatten = Object.assign(chartBase('flatten', 'A synthetic projection of two clouds onto a two-dimensional cross-section of a higher-dimensional hyperplane', { target: [3, 0.6, 1], pos: [11.5, 6.5, 13.5], dist2d: 16 }), {
     alpha: 0,
     build() {
       const d = cloudData(), g = this.group;
@@ -1107,8 +1137,8 @@ a.btn{text-decoration:none}
       axes(g, CLOUD_AXES, this);
       this.lblH = { text: 'μ harmful', local: new THREE.Vector3(5.2, 5.1, 1), cls: 'hot', color: HEX.pink };
       this.lblL = { text: 'μ harmless', local: new THREE.Vector3(3.4, -2.75, 1), cls: 'hot', color: HEX.yellow };
-      this.lblAfter = { text: 'both land here: (1.76, −1.32, 1)', local: new THREE.Vector3(3.4, -2.85, 1), cls: 'hot', color: HEX.green, hidden: true };
-      this.labels.push(this.lblH, this.lblL, this.lblAfter, { text: 'the sheet: directions the model keeps', local: new THREE.Vector3(c.x + 2.9, c.y - 2.2, c.z + 1.8), cls: 'big', color: HEX.green });
+      this.lblAfter = { text: 'both cluster means: (1.76, −1.32, 1)', local: new THREE.Vector3(3.4, -2.85, 1), cls: 'hot', color: HEX.green, hidden: true };
+      this.labels.push(this.lblH, this.lblL, this.lblAfter, { text: '2D slice of the orthogonal subspace', local: new THREE.Vector3(c.x + 2.9, c.y - 2.2, c.z + 1.8), cls: 'big', color: HEX.green });
       this.pickables = [this.pink, this.yel];
       this.legend = [
         { label: 'Refused (harmful)', css: HEX.pink, objects: [this.pink, this.mH] },
