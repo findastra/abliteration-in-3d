@@ -878,6 +878,10 @@ a.btn{text-decoration:none}
       <div class="term"><dt>Heretic 2.1</dt><dd>A version of a model-modification tool that searches candidate edits and compares refusal reduction against changes in model behavior.</dd></div>
       <div class="term"><dt>128 GB RAM</dt><dd>The machine's total installed memory, not a promise that every byte is available to the GPU or model.</dd></div>
       <div class="term"><dt>MPOA / ARA</dt><dd>Two different candidate model-editing approaches documented in this project; they must be evaluated independently.</dd></div>
+      <div class="term"><dt>FAKEM (Astra's working framework)</dt><dd>F = Flexibility, A = Association, K = Knowledge, E = Evaluation, M = Metacognition. A proposed model of interacting creative capabilities, not a validated formula or neural coordinate system.</dd></div>
+      <div class="term"><dt>Meta-creativity</dt><dd>An existing research term. On this site it means examining and improving the processes by which creative solutions are generated, evaluated and revised. Astra's FAKEM is a proposed operational framework, not the first use of the word.</dd></div>
+      <div class="term"><dt>Divergent Association Task (DAT)</dt><dd>A verbal divergent-thinking test asking for ten semantically distant nouns. It assesses one component of creativity, not total creative ability.</dd></div>
+      <div class="term"><dt>Design of Experiments (DOE)</dt><dd>A controlled study that varies preselected factors, measures outcomes and checks interactions while limiting confounds.</dd></div>
     </dl>
   </aside>
 </div>
@@ -885,12 +889,108 @@ a.btn{text-decoration:none}
 
 <section class="concepts" aria-label="New concept maps" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px">
 <h2>Concept maps: from hardware to model behavior</h2><p>These maps explain the stack, not measured results from Wisp. Select a topic to see the pieces and their connections.</p>
-<div class="picker" role="tablist" aria-label="Concept map topics"><button class="btn" type="button" role="tab" aria-selected="true" data-concept="transformer">Transformer</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="hardware">Hardware &amp; inference</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="tools">Tool calling</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="evaluation">Editing &amp; evaluation</button></div>
+<div class="picker" role="tablist" aria-label="Concept map topics"><button class="btn" type="button" role="tab" aria-selected="true" data-concept="transformer">Transformer</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="hardware">Hardware &amp; inference</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="tools">Tool calling</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="evaluation">Editing &amp; evaluation</button><button class="btn" type="button" role="tab" aria-selected="false" data-concept="fakem">FAKEM · Metacreativity</button></div>
 <div id="concept-transformer" data-concept-panel role="tabpanel"><h3>How a transformer processes a token</h3><p class="eq">Text → tokens → embeddings → repeated attention + feed-forward layers → output scores → next token</p><p>Attention combines context from other tokens. Feed-forward layers transform each token representation. Residual connections carry information forward. An MoE layer routes a token through a subset of available experts; the entire model is not active for every token.</p></div>
 <div id="concept-hardware" data-concept-panel role="tabpanel" hidden><h3>How your local model runs</h3><p class="eq">GEEKOM → Ryzen CPU + Radeon iGPU → unified RAM → llama.cpp → model tokens</p><p>The original BF16 weights are large. Quantization reduces storage and memory demand. GPU acceleration depends on the actual backend (for example, Vulkan or ROCm), drivers and memory allocation. This is an architecture map, not a measured speed claim.</p></div>
 <div id="concept-tools" data-concept-panel role="tabpanel" hidden><h3>Tool calling is an application workflow</h3><p class="eq">User → chat template → model → structured tool request → parser → permission check → tool → result → model</p><p>A model's ability to write a tool request is separate from the harness's ability to execute it. Validate the tool name and arguments, enforce permissions and record the result. Local inference alone does not demonstrate working tool calling.</p></div>
 <div id="concept-evaluation" data-concept-panel role="tabpanel" hidden><h3>Test the edit, not just the picture</h3><p class="eq">Stock model → candidate edit (MPOA / ARA) → evaluate refusals + drift + truthfulness + reasoning + tool calls → compare</p><p>One-direction projection is a teaching model. Actual Heretic edits weights; different layers and experts can behave differently. Compare the edited and stock models on matched prompts, and test quantized deployments again.</p></div>
+<div id="concept-fakem" data-concept-panel role="tabpanel" hidden>
+<h3>FAKEM — Meta-creativity as a research hypothesis</h3>
+<p><strong>C = f(F, A, K, E, M)</strong> proposes that creative performance depends on interacting capabilities. It does <em>not</em> assert that five independent neural axes exist, that creativity is a single vector, or that the quantities are known.</p>
+<p><strong>F</strong> = Flexibility (reframing), <strong>A</strong> = Association (useful cross-domain connections), <strong>K</strong> = Knowledge (accessible relevant context), <strong>E</strong> = Evaluation (judging utility and quality), <strong>M</strong> = Metacognition (monitoring and improving the process). Explore five diagrams below. All points and axes are <strong>illustrative, synthetic</strong> — no measured model activations.</p>
+<div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:12px 0">
+<label for="fakemDemo">Illustrative strategy-improvement slider: <output id="fakemDemoOut">50%</output></label>
+<input id="fakemDemo" type="range" min="0" max="100" value="50" style="accent-color:var(--pink);width:180px" aria-label="Illustrative strategy improvement percentage">
+</div>
+<div id="fakemRadar" role="img" aria-label="A five-spoke concept wheel labeled F A K E M; schematic scores are generated for teaching and are not measured in any model"></div>
+<div id="fakemCharts" class="fakem-charts" aria-label="Five independent conceptual diagrams"></div>
+<details style="margin-top:14px"><summary>What could actually be measured?</summary><p><b>F:</b> number of valid alternative problem framings; <b>A:</b> usefulness of cross-domain analogies; <b>K:</b> relevant context access or retrieval accuracy; <b>E:</b> agreement with blinded expert ratings; <b>M:</b> performance gain across feedback-guided revisions. These are candidate operational definitions and require validation. They are not necessarily statistically or neurally independent.</p></details>
+<p><strong>Research design:</strong> benchmark stock model first; then compare prompt scaffolds, inference-time steering and optionally edited copies using matched prompts, randomized order, repeated trials, blinded evaluators, and held-out tasks. Include baseline reasoning and factuality checks. Neither the slider nor these pictures modifies a model.</p>
+<p><strong>Related published work:</strong> <a href="https://doi.org/10.1080/10400419.2015.1065134" target="_blank" rel="noopener noreferrer">Runco (2015): Meta-Creativity</a>; <a href="https://doi.org/10.1016/j.plrev.2023.07.002" target="_blank" rel="noopener noreferrer">Lebuda &amp; Benedek (2023): creative metacognition</a>; <a href="https://arxiv.org/abs/2607.01433" target="_blank" rel="noopener noreferrer">CreativityNeuro (2026)</a>; <a href="https://arxiv.org/abs/2510.20091" target="_blank" rel="noopener noreferrer">CreativityPrism</a>; <a href="https://www.datcreativity.com/task" target="_blank" rel="noopener noreferrer">DAT test</a>.</p>
+<p style="color:var(--muted)">FAKEM is a proposed framework by Astra. “Meta-creativity” is an existing term in research and is not claimed as newly coined here. See <a href="research/FAKEM-DOE-20261121.md">the proposed DOE</a>.</p>
+</div>
 </section>
+
+<style>
+.fakem-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin-top:14px}
+.fakem-figure{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--well)}
+.fakem-figure h4{font:700 16px var(--display);margin:0 0 5px}
+.fakem-figure p{font-size:12.5px;line-height:1.4;color:var(--muted);margin:7px 0 0}
+.fakem-figure svg{display:block;width:100%;height:auto}
+#fakemRadar{max-width:440px;margin:auto}
+#fakemRadar svg{display:block;width:100%;height:auto}
+</style>
+<script>
+(function(){
+'use strict';
+// Synthetic deterministic illustrations: never read, modify, or claim actual model activations.
+const entries=[
+{key:'F',name:'Flexibility',c:'#ff4fa3',desc:'Compare different useful reframings rather than repeating one strategy.',x:'Approach variety',y:'Valid reframings',n:'Changing the problem representation'},
+{key:'A',name:'Association',c:'#ffd23f',desc:'Test whether connections between distant domains are structurally sound, not merely surprising.',x:'Domain distance',y:'Transfer utility',n:'Useful structural analogy'},
+{key:'K',name:'Knowledge',c:'#7fe0a8',desc:'Measure access to relevant context; more context is not always better.',x:'Context relevance',y:'Supported insights',n:'Accessible grounded knowledge'},
+{key:'E',name:'Evaluation',c:'#86b9f6',desc:'Compare selection decisions with blinded expert ratings on originality and usefulness.',x:'Candidate quality',y:'Selection accuracy',n:'Calibrated creative judgment'},
+{key:'M',name:'Metacognition',c:'#d0a1ff',desc:'Compare initial and revised solutions after feedback; monitor whether revision actually helps.',x:'Feedback cycles',y:'Verified improvement',n:'Monitoring and process regulation'}
+];
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,text){const x=document.createElementNS(NS,tag);Object.entries(attrs||{}).forEach(([k,v])=>x.setAttribute(k,String(v)));if(text!==undefined)x.textContent=text;return x;}
+function chart(entry,index,value){
+ const wrap=document.createElement('article');wrap.className='fakem-figure';
+ const h=document.createElement('h4');h.textContent=entry.key+' — '+entry.name;wrap.append(h);
+ const svg=el('svg',{viewBox:'0 0 280 206',role:'img','aria-label':'Synthetic points for '+entry.name+' with schematic axis labels: '+entry.x+' and '+entry.y});
+ const x0=39,y0=164,w=220,hgt=131;
+ svg.append(el('path',{d:'M39 30 V164 H260',stroke:'#9faad0','stroke-width':1.4,fill:'none'}));
+ for(let i=0;i<4;i++){const yy=164-i*43.6;svg.append(el('path',{d:'M39 '+yy+' H260',stroke:'#506088','stroke-width':.6,'stroke-dasharray':'3 5'}));}
+ svg.append(el('text',{x:149,y:196,'font-size':10,fill:'#fff4ec','text-anchor':'middle'},entry.x));
+ svg.append(el('text',{x:12,y:98,'font-size':10,fill:'#fff4ec',transform:'rotate(-90 12 98)','text-anchor':'middle'},entry.y));
+ let points=[];
+ for(let j=0;j<24;j++){const t=j/23;
+ const jitter=Math.sin(j*19.73+index*12.1)*.09;
+ let y=.22+.48*t+Math.cos(j*7.19+index)*.11;
+ if(index===1)y=.3+.54*Math.exp(-Math.pow((t-.58)*2.8,2))+jitter;
+ if(index===2)y=.18+.68*(1-Math.exp(-3*t))+jitter;
+ if(index===3)y=.18+.75*t+jitter;
+ if(index===4)y=.15+.66*(1-Math.exp(-2.3*t))+jitter;
+ y=Math.max(.04,Math.min(.94,y+(value-.5)*(.14+.11*t)));
+ const xx=x0+18+t*(w-36),yy=y0-y*(hgt-12);
+ points.push({x:xx,y:yy});
+ svg.append(el('circle',{cx:xx.toFixed(2),cy:yy.toFixed(2),r:3.3,fill:entry.c,opacity:.87}));
+ }
+ const meanY=points.reduce((a,p)=>a+p.y,0)/points.length;
+ svg.append(el('line',{x1:39,y1:meanY,x2:258,y2:meanY,stroke:entry.c,'stroke-width':1.3,'stroke-dasharray':'5 3',opacity:.7}));
+ const p=document.createElement('p');p.textContent=entry.n+'. '+entry.desc;
+ wrap.append(svg,p);return wrap;
+}
+function radar(value){
+ const svg=el('svg',{viewBox:'0 0 340 256',role:'img','aria-label':'Five schematic directions F A K E M arranged as spokes; values are invented for a teaching illustration'});
+ const cx=170,cy=130,R=91,n=5,angles=Array.from({length:n},(_,i)=>-Math.PI/2+i*2*Math.PI/n);
+ const pos=(a,r)=>[cx+Math.cos(a)*r,cy+Math.sin(a)*r];
+ for(const scale of [.25,.5,.75,1]){
+ const pts=angles.map(a=>pos(a,R*scale).join(',')).join(' ');
+ svg.append(el('polygon',{points:pts,fill:'none',stroke:'#52618d','stroke-width':1}));
+ }
+ const coords=[];
+ entries.forEach((e,i)=>{
+ const a=angles[i],outer=pos(a,R),label=pos(a,R+28);
+ svg.append(el('line',{x1:cx,y1:cy,x2:outer[0],y2:outer[1],stroke:e.c,'stroke-width':1.5}));
+ svg.append(el('text',{x:label[0],y:label[1]+4,fill:e.c,'font-size':16,'font-weight':700,'text-anchor':'middle'},e.key));
+ const r=R*Math.max(.16,Math.min(.9,[.51,.64,.73,.57,.46][i]+(value-.5)*[.42,.22,.14,.3,.5][i]));
+ coords.push(pos(a,r).join(','));
+ });
+ svg.append(el('polygon',{points:coords.join(' '),fill:'#ff4fa3','fill-opacity':.17,stroke:'#ffb3cf','stroke-width':2}));
+ svg.append(el('text',{x:170,y:250,'font-size':10,fill:'#b7bfdc','text-anchor':'middle'},'Five conceptual spokes, NOT five neuron-space axes'));
+ return svg;
+}
+function render(){
+ const range=document.getElementById('fakemDemo'),target=document.getElementById('fakemCharts'),r=document.getElementById('fakemRadar');
+ if(!range||!target||!r)return;
+ const v=Number(range.value)/100;
+ document.getElementById('fakemDemoOut').textContent=range.value+'%';
+ r.replaceChildren(radar(v));
+ target.replaceChildren(...entries.map((e,i)=>chart(e,i,v)));
+}
+document.getElementById('fakemDemo')?.addEventListener('input',render);render();
+})();
+</script>
 <script>document.querySelectorAll('[data-concept]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-concept]').forEach(x=>x.setAttribute('aria-selected',String(x===b)));document.querySelectorAll('[data-concept-panel]').forEach(x=>x.hidden=x.id!=='concept-'+b.dataset.concept)}));</script>
 <script>
 (async () => {
